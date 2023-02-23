@@ -7,28 +7,59 @@
 
 import SwiftUI
 
-struct MainView: View {
-    let quotes = ["quotes 1","quotes 2","quotes 3","quotes 4","quotes 5","quotes 6","quotes 7","quotes 8","quotes 9","quotes 10","quotes 11","quotes 12","quotes 13","quotes 14","quotes 15"]
+struct ContentView: View {
+   
+    var quotes: [Quote]
+    
     var body: some View {
-            VStack{
-                HStack{
-                    Text("102 Quotes Available").font(.subheadline).italic().foregroundColor(.orange)
-                }
-                ScrollView(.horizontal, showsIndicators: false){
-                    HStack{
-                        ForEach(self.quotes, id: \.self){
-                            quote in
-                            Text(quote)
-                        }
-                    }
-                }
-            }
+        VStack{
+            CircleImage(circleImage: "lilly").frame(width: 80, height: 80).padding(.top, 89).padding(.bottom, 10)
+         MainView(quotes: quotes)
+         Spacer()
+        }.background(Image("motivation_bg").resizable().scaledToFill().edgesIgnoringSafeArea(.all))
     }
 }
 
-struct ContentView: View {
+struct MainView: View {
+    var quotes : [Quote]
     var body: some View {
-        MainView()
+        VStack{
+            HStack{
+                Text("\(self.quotes.count) Quotes Available").font(.subheadline).italic().foregroundColor(.orange)
+            }
+            ScrollView(.horizontal, showsIndicators: false){
+                HStack{
+                    ForEach(self.quotes, id: \.name){
+                        quote in
+                        VStack{
+                            CircleImage(circleImage: "lilly")
+                            Text(#" "\#(quote.quote) " "#)
+                            
+                            Divider()
+                            
+                            Text("By - \(quote.name)").italic().font(.custom("Helvetica neue", size: 14))
+                        }.frame(width: 250, height: 250)
+                            .foregroundColor(.gray)
+                            .padding(.all,4)
+                            .background(Color.white)
+                            .cornerRadius(30)
+                            .overlay(Rectangle().fill(LinearGradient(gradient: Gradient(colors: [.clear, .pink]), startPoint: .center, endPoint: .topLeading)).clipped().shadow(radius: 8))
+                    }
+                }
+            }
+        }
+    }
+}
+
+struct CircleImage: View {
+    var circleImage: String
+    var body: some View{
+        Image(circleImage)
+            .resizable()
+            .clipShape(Circle())
+            .overlay(Circle()
+                        .stroke(Color.gray,
+                                lineWidth: 2)).frame(width:80, height:80)
     }
 }
 
